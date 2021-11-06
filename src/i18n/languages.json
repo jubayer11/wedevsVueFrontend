@@ -4,22 +4,5 @@
     "locale": "en",
     "country": "us",
     "fallback": true
-  },
-  {
-    "name": "Français",
-    "locale": "fr-FR",
-    "country": "fr"
-  },
-  {
-    "name": "Русский",
-    "locale": "ru-RU",
-    "alternate": "ru",
-    "country": "ru"
-  },
-  {
-    "name": "日本語",
-    "locale": "ja-JP",
-    "alternate": "ja",
-    "country": "jp"
   }
 ]

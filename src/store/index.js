@@ -8,6 +8,9 @@ import header from "./modules/header";
 import footer from "./modules/footer";
 import translation from "./modules/translation";
 import theme from "./modules/theme";
+import snackbar from "./Snackbar"
+import authentication from "@/store/Authentication/authentication";
+import authorization from "./Authorization";
 
 Vue.use(Vuex);
 
@@ -23,6 +26,26 @@ export default new Vuex.Store({
         header,
         sidebar,
         footer,
+      },
+    },
+    snackbar: {
+      namespaced: true,
+      modules: {
+        snackbar,
+
+      },
+    },
+    authentication: {
+      namespaced: true,
+      modules: {
+        authentication,
+
+      },
+    },
+    authorization: {
+      namespaced: true,
+      modules: {
+        authorization,
       },
     },
     scheme: {

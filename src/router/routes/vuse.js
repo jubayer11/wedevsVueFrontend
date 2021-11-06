@@ -76,9 +76,41 @@ export default [
   },
   {
     params: {
+      path: "/dashboard",
+      name: "Dashboard",
+    },
+    defaultComponentPath: "Pages/Dashboard/dashboard",
+    navs: true,
+  },
+  {
+    params: {
+      path: "/dashboard/users",
+      name: "dashboardUsers",
+    },
+    defaultComponentPath: "Pages/Dashboard/Users/users",
+    navs: true,
+  },
+  {
+    params: {
+      path: "/dashboard/products",
+      name: "DashboardProducts",
+    },
+    defaultComponentPath: "Pages/Dashboard/Products/products",
+    navs: true,
+  },
+  {
+    params: {
+      path: "/dashboard/orders",
+      name: "DashboardOrders",
+    },
+    defaultComponentPath: "Pages/Dashboard/Orders/orders",
+    navs: true,
+  },
+  {
+    params: {
       path: "*",
       name: "PageNotFound",
-      meta: { layout: "full" },
+      meta: {layout: "full"},
     },
     defaultComponentPath: "Pages/Errors/Error404",
   },

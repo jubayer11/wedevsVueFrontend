@@ -28,8 +28,8 @@
                 <v-col cols="12" md="6">
                   <div class="my-8 text-center">
                     <div class="text-h4 d-flex justify-center align-center">
-                      <vuse-logo class="primary--text" size="45" /><b>use</b>
-                      <span class="ml-2">Admin</span>
+                      <vuse-logo class="primary--text" size="45" /><b>WEDEVS</b>
+
                     </div>
                     <div class="subtitle-1 mt-3">Hello, Welcome Back!</div>
                   </div>
@@ -38,6 +38,10 @@
                         @submit.prevent="$v.$invalid ? null : submit()"
                         ref="form"
                     >
+                      <div class="text-sm-h6 d-flex justify-center align-center mb-3">
+                        <span class="red--text text-lg-center"
+                              v-if="errorMessage.wrong"> {{ errorMessage.wrong }} </span>
+                      </div>
                       <v-text-field
                           :error-messages="fieldErrors('form.email')"
                           @input="$v.form.email.$touch()"
@@ -104,6 +108,8 @@
 // Validations
 import { required, email, minLength } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
+import {mapGetters} from "vuex";
+
 
 const defaultForm = {
   email: "",
@@ -137,23 +143,33 @@ export default {
     return {
       form: Object.assign({}, defaultForm),
       showPwd: false,
-      snackbar: false,
     };
   },
+  computed:
+      {
+        ...mapGetters("authentication", [
+          "errorMessage",
+        ]),
+
+        ...mapGetters("snackbar", [
+          "getSnackbar",
+        ]),
+      },
   methods: {
     submit() {
-      this.snackbar = true;
-      this.resetForm();
+
+      const formData = {
+        email: this.form.email,
+        password: this.form.password,
+        rememberMe: this.form.rememberMe,
+      }
+
       this.$v.$reset();
-      setTimeout(() => {
-        this.$router.push({
-          name: "dashboard/operational",
-        });
-      }, 2000);
-    },
-    resetForm() {
-      this.form = Object.assign({}, defaultForm);
-      this.$refs.form.reset();
+      this.$store.dispatch('authentication/login', {
+        email: formData.email,
+        password: formData.password,
+        rememberMe: formData.rememberMe,
+      })
     },
   },
 };
