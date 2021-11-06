@@ -5,7 +5,7 @@ export const defaultActiveMenuStyles = {
 };
 
 export default {
-  show: false,
+  show: true,
   miniVariant: false,
   isRight: false,
   activeMenuStyle: {

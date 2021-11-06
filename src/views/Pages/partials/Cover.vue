@@ -2,6 +2,7 @@
       <v-parallax
           dark
           src="../../../assets/home/home.jpg"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
       >
         <v-row
             align="center"

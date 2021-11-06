@@ -1,1 +1,6 @@
-export default [{ icon: "dashboard", title: "Home", name: "Home" }];
+export default [
+    {icon: "dashboard", title: "Dashboard", name: "Dashboard"},
+    {icon: "products", title: "Dashboard", name: "Dashboard"},
+
+];
+
