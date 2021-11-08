@@ -66,24 +66,7 @@
       </v-icon>
       My Orders
     </v-btn>
-    <v-badge
-        bordered
-        color="error"
-        icon="mdi-lock"
-        overlap
-        class="mr-3"
-    >
-      <v-btn
-          color="primary"
-          depressed
-          rounded
-          small
-      >
-        <v-icon small>
-          fa-shopping-cart
-        </v-icon>
-      </v-btn>
-    </v-badge>
+    <toolbarCart></toolbarCart>
     <v-badge
         bordered
         color="error"
@@ -183,11 +166,12 @@
 <script>
 import {mapGetters} from "vuex";
 import {availableLocale} from "@/config/locale";
-
+import toolbarCart from "./../../views/Pages/Cart/toolbar/toolbarCart"
 export default {
   props: {
     handleSettingsDrawer: Function,
   },
+  components:{toolbarCart},
   data() {
     return {
       id: '',

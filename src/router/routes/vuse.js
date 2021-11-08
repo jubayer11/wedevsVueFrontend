@@ -19,7 +19,7 @@ export default [
   },
   {
     params: {
-      path: "/product/:id",
+      path: "/product/:id/:name",
       name: "productView",
     },
     defaultComponentPath: "Pages/Product/partials/productView",

@@ -5,15 +5,14 @@
         <v-row class="px-12 py-12">
           <v-col cols="12" md="4">
             <v-text-field
-                v-model="last"
                 label="Search By Name"
                 filled
                 shaped
-
+                v-model="searchProduct"
             ></v-text-field>
           </v-col>
           <v-col class="mt-sm-3" cols="12" md="2">
-            <v-btn class="primary">Search</v-btn>
+            <v-btn @click="searchProductProduct" class="primary">Search</v-btn>
           </v-col>
           <v-col cols="12" md="4">
             <v-select
@@ -22,40 +21,46 @@
                 filled
                 item-text="data"
                 item-value="id"
-                label="Sort"
+                label="Sort By Price"
+                v-model="productSort"
             ></v-select>
 
           </v-col>
           <v-col class="mt-sm-3" cols="12" md="2">
-            <v-btn class="primary">Sort</v-btn>
+            <v-btn class="primary" @click="searchProductProduct">Sort</v-btn>
           </v-col>
         </v-row>
       </v-card>
       <v-card class="neu-glow-inset py-3" style="min-height: 80vh">
         <v-row dense>
           <v-col
-              :key="card.id"
-              v-for="card in cards"
+              :key="product.id"
+              v-for="product in showProductProducts"
               class="px-4"
+              cols="12"
+              md="4"
+
           >
             <v-card>
               <v-img
-
+                  height="200px"
                   class="white--text align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  height="200px"
+                  :src="url+'/uploads/products/'+product.image"
               >
-                <v-card-title v-text="card.title"></v-card-title>
+                <v-card-title class="product__inStock" v-if="product.quantity>0"> In Stock</v-card-title>
+                <v-card-title v-else class="product__outStock"> Out Of Stock</v-card-title>
               </v-img>
 
               <div class="ml-4">
-                <div class="my-3">jubayer ahmed</div>
-                <div>$200</div>
+                <div class="my-3">{{ product.name }}</div>
+                <div>${{ product.price }}</div>
               </div>
               <v-card-actions>
                 <v-btn
                     tile
                     color="success"
+                    @click="addToCart(product.id)"
                 >
                   <v-icon left>
                     fa-shopping-cart
@@ -66,6 +71,7 @@
                 <v-btn
                     tile
                     color="orange"
+                    @click="viewProduct(product)"
                 >
                   <v-icon left>
                     fa-eye
@@ -81,20 +87,22 @@
       <div class="text-center my-6">
         <v-pagination
             v-model="page"
-            :length="4"
+            :length="getPaginationLast"
             prev-icon="mdi-menu-left"
             next-icon="mdi-menu-right"
-
+            :total-visible="7"
         ></v-pagination>
       </div>
     </v-container>
   </div>
 </template>
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
+import axios from "axios";
 
 export default {
   data: () => ({
+        url: axios.defaults.baseURL,
         sort: [{
           id: 1,
           data: 'price low to high',
@@ -104,36 +112,49 @@ export default {
             data: 'price high to low',
           },
         ],
-        cards: [
-          {title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
-          {title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
-          {title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 4},
-          {title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
-          {title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
-          {title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 4},
-          {title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
-          {title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
-          {title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 4},
-          {title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
-          {title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
-          {title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 4},
-        ],
         page: 1,
+        searchProduct: ' ',
+        productSort: 0,
       }
 
   ),
   created() {
     this.pullProductProducts();
   },
+  watch: {
+    page() {
+      this.pullProductProducts();
+    },
+  },
+
   computed: {
-    ...mapGetters("products", [
-      "showProductProducts",
-    ]),
-  },
+    ...
+        mapGetters("products", [
+          "showProductProducts",
+          "getPaginationLast",
+        ]),
+  }
+  ,
   methods: {
-    ...mapActions("products", [
-      "pullProductProducts",
-    ]),
+    addToCart(id) {
+      this.userId = localStorage.getItem('userId');
+      this.$store.dispatch('carts/addToCart', {productId: id,userId:this.userId,quantity:0})
+    },
+    viewProduct(product) {
+      this.$store.dispatch('products/viewProduct', {product:product})
+    },
+    pullProductProducts() {
+      this.$store.dispatch('products/pullProductProducts', {
+        searchProduct: this.searchProduct,
+        page: this.page,
+        sort: this.productSort
+      })
+    },
+    searchProductProduct() {
+      this.page = 1;
+      this.pullProductProducts();
+    },
   },
+
 }
 </script>

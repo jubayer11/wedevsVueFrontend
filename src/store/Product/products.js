@@ -1,5 +1,6 @@
 import axios from "axios";
 import snackbar from "@/store/Snackbar";
+import router from "@/router";
 
 export const state =
     {
@@ -11,6 +12,12 @@ export const state =
         deleteProduct: '',
         homeProducts: '',
         productProducts: '',
+        productLastPage: 0,
+        page: 1,
+        sort: 0,
+        viewProduct: '',
+        viewProductId: '',
+
     }
 
 export const getters = {
@@ -26,7 +33,13 @@ export const getters = {
     },
     showProductProducts: (state) => {
         return state.productProducts;
-    }
+    },
+    getPaginationLast: (state) => {
+        return state.productLastPage;
+    },
+    showViewProduct: (state) => {
+        return state.viewProduct;
+    },
 }
 export const mutations = {
     setProduct(state) {
@@ -57,15 +70,19 @@ export const actions = {
                 }
             )
     },
-    pullProductProducts({state}) {
-        axios.get('/api/productProducts')
+    pullProductProducts({state}, data) {
+        state.page = data.page;
+        state.searchProduct = data.searchProduct;
+        state.sort = data.sort;
+        axios.get(`/api/productProducts/${state.searchProduct}/${state.sort}/?page=${state.page}`)
             .then(res => {
-                    state.productProducts = res.data.data
+                    state.productProducts = res.data.data;
+                    state.productLastPage = res.data.meta.last_page;
+
                 }
             )
     },
-
-    createProduct({state, dispatch, commit}, newProduct) {
+    createProduct({state, dispatch}, newProduct) {
         state.dialogClose = 0;
         snackbar.state.snackbar.condition = false;
         snackbar.state.snackbar.message = '';
@@ -80,13 +97,7 @@ export const actions = {
                     snackbar.state.snackbar.message = 'New Product Created'
                     dispatch('getProducts')
                 }
-
-
             })
-            .catch(error =>
-                commit('setContactPersonCreateErrorMessage', error.response.data.errors)
-            )
-
     },
     editProduct({state, commit}, editProduct) {
         state.dialogClose = 0;
@@ -119,6 +130,21 @@ export const actions = {
                 }
             })
     },
+    viewProduct({state}, product) {
+        state.viewProduct = product.product;
+        router.push({
+            name: 'productView',
+            params: {id: state.viewProduct.id, name: state.viewProduct.name}
+        })
+    },
+    pullViewProduct({state}, id) {
+        state.viewProductId = id.id;
+        axios.get(`/api/product/${state.viewProductId}`)
+            .then(res => {
+                    state.viewProduct = res.data.data;
+                }
+            )
+    }
 }
 
 export default {
