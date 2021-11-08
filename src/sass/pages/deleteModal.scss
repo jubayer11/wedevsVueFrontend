@@ -1,0 +1,36 @@
+.delete
+{
+  &__card
+  {
+
+
+    &__text
+    {
+      margin: 20px;
+      div
+      {
+        font-size: 15px;
+        color: #f38d00;
+        font-weight: bolder;
+      }
+    }
+  }
+    &__dialog {
+      &__delete {
+        button {
+          background-color: #1A237E !important;
+          color: white !important;
+          border: 1px solid navajowhite;
+        }
+
+      }
+
+      &__cancel {
+        button {
+          background-color: #B71C1C !important;
+          color: white !important;
+          border: 1px solid navajowhite;
+        }
+      }
+    }
+}

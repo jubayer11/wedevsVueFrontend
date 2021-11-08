@@ -3,7 +3,7 @@
     <v-container>
       <v-card class="neu-glow-primary mx-6 my-6">
         <v-row class="px-12 py-12">
-          <v-col cols="12" sm="6">
+          <v-col cols="12" md="4">
             <v-text-field
                 v-model="last"
                 label="Search By Name"
@@ -12,17 +12,26 @@
 
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6">
+          <v-col class="mt-sm-3" cols="12" md="2">
+            <v-btn class="primary">Search</v-btn>
+          </v-col>
+          <v-col cols="12" md="4">
             <v-select
                 shaped
-                :items="items"
+                :items="sort"
                 filled
+                item-text="data"
+                item-value="id"
                 label="Sort"
             ></v-select>
+
+          </v-col>
+          <v-col class="mt-sm-3" cols="12" md="2">
+            <v-btn class="primary">Sort</v-btn>
           </v-col>
         </v-row>
       </v-card>
-      <v-card class="neu-glow-inset" style="min-height: 80vh">
+      <v-card class="neu-glow-inset py-3" style="min-height: 80vh">
         <v-row dense>
           <v-col
               :key="card.id"
@@ -82,9 +91,19 @@
   </div>
 </template>
 <script>
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   data: () => ({
-        items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+        sort: [{
+          id: 1,
+          data: 'price low to high',
+        },
+          {
+            id: 2,
+            data: 'price high to low',
+          },
+        ],
         cards: [
           {title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
           {title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
@@ -101,6 +120,20 @@ export default {
         ],
         page: 1,
       }
+
   ),
+  created() {
+    this.pullProductProducts();
+  },
+  computed: {
+    ...mapGetters("products", [
+      "showProductProducts",
+    ]),
+  },
+  methods: {
+    ...mapActions("products", [
+      "pullProductProducts",
+    ]),
+  },
 }
 </script>

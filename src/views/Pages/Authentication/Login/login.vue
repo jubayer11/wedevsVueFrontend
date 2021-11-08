@@ -97,10 +97,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-snackbar v-model="snackbar" absolute top right color="success">
-      <span>Signed In Successfully</span>
-      <v-icon dark>check_circle</v-icon>
-    </v-snackbar>
   </v-sheet>
 </template>
 
@@ -151,9 +147,6 @@ export default {
           "errorMessage",
         ]),
 
-        ...mapGetters("snackbar", [
-          "getSnackbar",
-        ]),
       },
   methods: {
     submit() {

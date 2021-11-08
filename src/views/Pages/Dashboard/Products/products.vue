@@ -1,128 +1,128 @@
 <template>
   <div class="vuse-content-wrapper">
-    <v-container>
-      <v-card class="neu-glow-inset py-12 px-12" style="min-height: 80vh">
-        <v-card-title>
-          My Orders
-          <v-spacer></v-spacer>
-          <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-          ></v-text-field>
-        </v-card-title>
+    <v-container fluid>
+      <v-card class="neu-glow-inset with-radius pa-5">
         <v-data-table
             :headers="headers"
-            :items="desserts"
+            class="elevation-2 pt-6"
+            :items="showProducts"
+            item-key="name"
             :search="search"
-        ></v-data-table>
+        >
+
+          <template v-slot:top>
+            <v-row class="px-4" align="center" justify="center">
+              <v-text-field
+                  v-model="search"
+                  append-icon="mdi-magnify "
+                  label="Search"
+                  outlined
+                  dense
+                  single-line
+                  class="shrink"
+
+              ></v-text-field>
+
+            </v-row>
+            <v-toolbar
+                flat
+            >
+              <v-toolbar-title>Products</v-toolbar-title>
+
+
+              <v-divider
+                  class="mx-4"
+                  inset
+                  vertical
+              ></v-divider>
+
+
+              <v-spacer></v-spacer>
+              <createProduct></createProduct>
+            </v-toolbar>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <div class="display__flex">
+              <editProduct :item="item"></editProduct>
+
+              <delete-product :item="item"></delete-product>
+            </div>
+          </template>
+          <template v-slot:item.image="{ item }">
+            <v-img gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                   max-height="100" max-width="100" :src="url+'/uploads/products/'+item.image">
+
+            </v-img>
+          </template>
+          <template v-slot:item.price="{ item }">
+           ${{item.price}}
+          </template>
+          <template v-slot:item.description="{ item }">
+            <div class="display__flex">
+              <viewDescription :item="item"></viewDescription>
+            </div>
+          </template>
+        </v-data-table>
       </v-card>
     </v-container>
   </div>
 </template>
 <script>
+import {mapActions, mapGetters} from "vuex";
+import createProduct from "./CRUD/createProduct";
+import editProduct from "./CRUD/editProduct";
+import deleteProduct from "./CRUD/deleteProduct";
+import viewDescription from "./CRUD/viewDescription"
+import axios from "axios";
+
 export default {
-  data () {
-    return {
-      search: '',
-      headers: [
-        {
-          text: 'Dessert (100g serving)',
-          align: 'start',
-          sortable: false,
-          value: 'name',
-        },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Iron (%)', value: 'iron' },
-      ],
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: '1%',
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%',
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%',
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: '8%',
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: '16%',
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%',
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%',
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: '45%',
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: '22%',
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: '6%',
-        },
-      ],
-    }
+  components: {createProduct, viewDescription,editProduct,deleteProduct},
+  data: () => ({
+        fetchUsers: 'allUsers',
+        search: '',
+        dialogDelete: false,
+        url: axios.defaults.baseURL,
+        headers: [
+          {
+            align: 'start',
+            text: 'Image',
+            value: 'image',
+          },
+          {
+            text: 'Name',
+            value: 'name',
+          },
+          {text: 'uniqueId', value: 'uniqueId'},
+          {text: 'Price', value: 'price'},
+          {text: 'Quantity', value: 'quantity'},
+          {text: 'description', value: 'description'},
+          {text: 'Actions', value: 'actions', sortable: false},
+        ],
+      }
+  ),
+
+
+  computed: {
+    ...mapGetters("products", [
+      "showProducts",
+    ]),
+  },
+
+
+  created() {
+    this.getProducts();
+  },
+
+
+  methods: {
+    ...mapActions("products", [
+      "getProducts",
+    ]),
   },
 }
 </script>
+<style scoped>
+.display__flex {
+  display: flex !important;
+}
+</style>

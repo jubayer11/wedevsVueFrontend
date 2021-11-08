@@ -11,7 +11,9 @@ import theme from "./modules/theme";
 import snackbar from "./Snackbar"
 import authentication from "@/store/Authentication/authentication";
 import authorization from "./Authorization";
-
+import products from "./Product/products"
+import orders from "./Order/orders"
+import carts from "./Cart/carts"
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -46,6 +48,24 @@ export default new Vuex.Store({
       namespaced: true,
       modules: {
         authorization,
+      },
+    },
+    products: {
+      namespaced: true,
+      modules: {
+        products,
+      },
+    },
+    orders: {
+      namespaced: true,
+      modules: {
+        orders,
+      },
+    },
+    carts: {
+      namespaced: true,
+      modules: {
+        carts,
       },
     },
     scheme: {

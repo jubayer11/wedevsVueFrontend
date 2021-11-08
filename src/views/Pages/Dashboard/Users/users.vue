@@ -58,24 +58,8 @@
 
 
               <v-spacer></v-spacer>
-              <createUsers></createUsers>
+
             </v-toolbar>
-          </template>
-          <template v-slot:item.actions="{ item }">
-            <div class="display__flex">
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="viewItem(item)"
-                  color="green darken-2"
-              >
-                remove_red_eye
-              </v-icon>
-              <editUsers :item="item"></editUsers>
-
-              <deleteUsers :item="item"></deleteUsers>
-            </div>
-
           </template>
           <template v-slot:item.isStaff="{ item }">
             <div class="staff" v-if="item.isStaff==0">
@@ -85,9 +69,6 @@
               YES
             </div>
           </template>
-          <template v-slot:item.isPermission="{ item }">
-            <assignPermissionToUser :item="item" v-if="item.isStaff==1"></assignPermissionToUser>
-          </template>
         </v-data-table>
       </v-card>
     </v-container>
@@ -95,13 +76,10 @@
 </template>
 <script>
 import {mapActions, mapGetters} from "vuex";
-import createUsers from "./CRUD/create/createUsers";
-import deleteUsers from "./CRUD/delete/deleteUsers";
-import editUsers from "./CRUD/edit/editUsers"
-import assignPermissionToUser from "./CRUD/assign/assignPermissionToUser";
+
 
 export default {
-  components: {createUsers, deleteUsers, editUsers, assignPermissionToUser},
+
   data: () => ({
         fetchUsers: 'allUsers',
         search: '',
@@ -120,7 +98,7 @@ export default {
           {text: 'Role', value: 'role'},
           {text: 'Email', value: 'email'},
           {text: 'Staff', value: 'isStaff'},
-          {text: 'Actions', value: 'actions', sortable: false},
+          {text: 'created', value: 'createdAt'},
         ],
         tableShowUsers: '',
         xyz: '',
@@ -134,45 +112,24 @@ export default {
     ...mapGetters("authorization", [
       "showUsers",
     ]),
-    ...mapGetters("snackbar", [
-      "getSnackbar",
-
-    ]),
-
-    formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-    },
   },
 
   watch: {
     fetchUsers(newValue) {
       this.$store.commit('authorization/fetchUsersAdmin', {user: newValue});
-
     },
   },
 
   created() {
     this.getUsers();
-    this.getRole();
-    this.pullAllPermission();
+
   },
 
 
   methods: {
     ...mapActions("authorization", [
       "getUsers",
-      "pullAllPermission",
     ]),
-
-    viewItem(user) {
-
-
-      this.$store.dispatch('authorization/userProfile', {user: user})
-    },
-
-    getRole() {
-      this.$store.dispatch('authorization/getRoles')
-    },
   },
 }
 </script>

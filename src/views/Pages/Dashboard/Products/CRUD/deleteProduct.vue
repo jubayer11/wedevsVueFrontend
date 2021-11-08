@@ -32,7 +32,7 @@
         </v-card-text>
         <v-card-actions class="delete__card__actions">
           <v-spacer></v-spacer>
-          <div class="delete__dialog__cancel">
+          <div class="delete__dialog__cancel mr-3">
             <v-btn
                 @click="dialog = false"
             >
@@ -40,9 +40,9 @@
             </v-btn>
           </div>
 
-          <div class="delete__dialog__delete">
+          <div class="delete__dialog__delete ">
             <v-btn
-                @click="deleteUsers"
+                @click="deleteProduct"
             >
               Delete
             </v-btn>
@@ -63,9 +63,9 @@ export default {
     }
   },
   methods: {
-    deleteUsers() {
+    deleteProduct() {
       this.dialog = false;
-      this.$store.dispatch('authorization/deleteUsers', this.item)
+      this.$store.dispatch('products/deleteProduct', this.item)
     }
   },
 }

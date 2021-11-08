@@ -124,6 +124,8 @@ export const actions = {
 
 
     login({state, commit, dispatch}, authData) {
+        snackbar.state.snackbar.condition = false;
+        snackbar.state.snackbar.message = '';
         axios.post('/auth/login', {
 
             email: authData.email,

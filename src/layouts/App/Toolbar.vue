@@ -173,6 +173,10 @@
         </template>
       </v-list>
     </v-menu>
+    <v-snackbar :value="getSnackbar.condition" absolute top right color="success">
+      <span>{{ getSnackbar.message }}</span>
+      <v-icon dark>check_circle</v-icon>
+    </v-snackbar>
   </v-app-bar>
 </template>
 
@@ -229,6 +233,10 @@ export default {
   },
   computed: {
     activeItemStyle: (state) => state.activeMenuStyle,
+    ...mapGetters("snackbar", [
+      "getSnackbar",
+    ]),
+
     ...mapGetters("navigations", [
       "isSettingsShow",
       "isVisibleHeader",

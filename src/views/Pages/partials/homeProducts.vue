@@ -13,11 +13,11 @@
 
       <v-row dense>
         <v-col
-            :key="card.id"
-            v-for="card in cards"
+            :key="product.id"
+            v-for="product in showHomeProducts"
             class="px-4"
             cols="12"
-            :md="card.flex"
+            md="4"
         >
           <v-card>
             <v-img
@@ -25,14 +25,16 @@
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 height="200px"
-                :src="card.src"
+                :src="url+'/uploads/products/'+product.image"
             >
-              <v-card-title v-text="card.title"></v-card-title>
+              <v-card-title class="product__inStock" v-if="product.quantity>0" > In Stock</v-card-title>
+              <v-card-title v-else class="product__outStock" > Out Of Stock</v-card-title>
+
             </v-img>
 
             <div class="ml-4">
-              <div class="my-3">jubayer ahmed</div>
-              <div>$200</div>
+              <div class="my-3">{{product.name}}</div>
+              <div>${{product.price}}</div>
             </div>
             <v-card-actions>
               <v-btn
@@ -65,13 +67,25 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+import axios from "axios";
+
 export default {
   data: () => ({
-    cards: [
-      {title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
-      {title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
-      {title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 4},
-    ],
+    url: axios.defaults.baseURL,
   }),
+  created() {
+    this.pullHomeProducts();
+  },
+  computed: {
+    ...mapGetters("products", [
+      "showHomeProducts",
+    ]),
+  },
+  methods: {
+    ...mapActions("products", [
+      "pullHomeProducts",
+    ]),
+  },
 }
 </script>
