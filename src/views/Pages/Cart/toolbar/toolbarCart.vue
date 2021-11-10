@@ -13,6 +13,7 @@
           depressed
           rounded
           small
+          @click="showCart"
       >
         <v-icon small>
           fa-shopping-cart
@@ -26,15 +27,27 @@ import {mapGetters} from "vuex";
 
 export default {
   data: () => ({
-
+        userId: '',
       }
 
   ),
+  created() {
+    this.getProductCartCount();
+  },
   computed: {
     ...
         mapGetters("carts", [
           "getCartCount",
         ]),
+  },
+  methods: {
+    getProductCartCount() {
+      this.userId = localStorage.getItem('userId');
+      this.$store.dispatch('carts/getProductCartCount', {userId: this.userId})
+    },
+    showCart() {
+      this.$store.dispatch('carts/viewCart')
+    },
   },
 }
 </script>

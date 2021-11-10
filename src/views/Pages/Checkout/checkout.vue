@@ -2,8 +2,8 @@
   <div class="vuse-content-wrapper">
     <v-container>
       <v-card class="neu-glow-inset px-12 py-12">
-        <v-card class="neu-glow-primary with-radius ma-12 px-4"   :key="card.id"
-                v-for="card in cards"
+        <v-card class="neu-glow-primary with-radius ma-12 px-4" :key="product.id"
+                v-for="product in showCartProduct"
         >
           <v-row justify="center" align="center">
             <v-col cols="12" md="3">
@@ -12,23 +12,24 @@
                   class="white--text align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   height="200px"
-                  :src="card.src"
+                  :src="url+'/uploads/products/'+product.image"
               >
-                <v-card-title v-text="card.title"></v-card-title>
+                <v-card-title class="product__inStock" v-if="product.quantity>0"> In Stock</v-card-title>
+                <v-card-title v-else class="product__outStock"> Out Of Stock</v-card-title>
               </v-img>
             </v-col>
             <v-col cols="12" md="3">
-              jubayer ahmed
+              {{ product.name }}
             </v-col>
             <v-col cols="12" md="2">
-              Total Price: $120
+              Total Price: ${{ parseFloat(parseFloat(product.price) * parseInt(product.customerQuantity)) }}
             </v-col>
             <v-col cols="12" md="2">
 
-                <div class="product__quantity">Quantity:</div>
+              <div class="product__quantity">Quantity: {{ product.customerQuantity }}</div>
             </v-col>
             <v-col cols="12" md="2">
-              <v-btn small color="red">
+              <v-btn @click="detachCartProduct(product)" small color="red">
                 <v-icon small>
                   delete
                 </v-icon>
@@ -53,7 +54,7 @@
         </v-card>
 
         <v-row class="mt-12" align="center" justify="center">
-          <v-btn large class="primary">
+          <v-btn @click="orderProduct" large class="primary">
             Order
           </v-btn>
         </v-row>
@@ -62,19 +63,40 @@
   </div>
 </template>
 <script>
+import {mapGetters} from "vuex";
+import axios from "axios";
+
 export default {
   data: () => ({
-    cards: [
-      {title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 4},
-      {title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 4},
-      {title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 4},
-    ],
+    url: axios.defaults.baseURL,
+    userId: '',
   }),
+  created() {
+    this.getCartProduct();
+  },
+  computed: {
+    ...
+        mapGetters("carts", [
+          "showCartProduct",
+        ]),
+  },
+  methods: {
+    getCartProduct() {
+      this.userId = localStorage.getItem('userId');
+      this.$store.dispatch('carts/getCartProduct', {userId: this.userId})
+    },
+    detachCartProduct(product) {
+      this.$store.dispatch('carts/detachCartProduct', {product: product})
+    },
+    orderProduct() {
+      this.userId = localStorage.getItem('userId');
+      this.$store.dispatch('orders/orderProduct',{data:this.showCartProduct,userId:this.userId})
+    }
+  },
 }
 </script>
 <style scoped>
-.checkout__price
-{
+.checkout__price {
   font-size: 30px;
   color: orange;
   font-weight: bolder;

@@ -115,6 +115,7 @@ export default {
         page: 1,
         searchProduct: ' ',
         productSort: 0,
+        userId: '',
       }
 
   ),
@@ -138,10 +139,10 @@ export default {
   methods: {
     addToCart(id) {
       this.userId = localStorage.getItem('userId');
-      this.$store.dispatch('carts/addToCart', {productId: id,userId:this.userId,quantity:0})
+      this.$store.dispatch('carts/addToCart', {productId: id, userId: this.userId, quantity: 0})
     },
     viewProduct(product) {
-      this.$store.dispatch('products/viewProduct', {product:product})
+      this.$store.dispatch('products/viewProduct', {product: product})
     },
     pullProductProducts() {
       this.$store.dispatch('products/pullProductProducts', {

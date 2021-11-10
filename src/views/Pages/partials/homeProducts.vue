@@ -40,6 +40,8 @@
               <v-btn
                   tile
                   color="success"
+                  @click="addToCart(product.id)"
+
               >
                 <v-icon left>
                   fa-shopping-cart
@@ -50,6 +52,7 @@
               <v-btn
                   tile
                   color="orange"
+                  @click="viewProduct(product)"
               >
                 <v-icon left>
                   fa-eye
@@ -73,6 +76,7 @@ import axios from "axios";
 export default {
   data: () => ({
     url: axios.defaults.baseURL,
+    userId: '',
   }),
   created() {
     this.pullHomeProducts();
@@ -86,6 +90,13 @@ export default {
     ...mapActions("products", [
       "pullHomeProducts",
     ]),
+    viewProduct(product) {
+      this.$store.dispatch('products/viewProduct', {product: product})
+    },
+    addToCart(id) {
+      this.userId = localStorage.getItem('userId');
+      this.$store.dispatch('carts/addToCart', {productId: id,userId:this.userId,quantity:0})
+    },
   },
 }
 </script>
