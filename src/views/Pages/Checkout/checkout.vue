@@ -40,7 +40,7 @@
         </v-card>
         <v-card class="neu-glow-primary with-radius ma-12 py-10">
           <v-row justify="center" align="center">
-            <div class="checkout__price">Total: $540</div>
+            <div class="checkout__price">Total: ${{ this.$store.state.carts.carts.totalPrice }}</div>
           </v-row>
         </v-card>
 
@@ -49,7 +49,7 @@
               outlined
               name="input-7-4"
               label="Address"
-              value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+              v-model="address"
           ></v-textarea>
         </v-card>
 
@@ -70,6 +70,7 @@ export default {
   data: () => ({
     url: axios.defaults.baseURL,
     userId: '',
+    address: '',
   }),
   created() {
     this.getCartProduct();
@@ -90,7 +91,7 @@ export default {
     },
     orderProduct() {
       this.userId = localStorage.getItem('userId');
-      this.$store.dispatch('orders/orderProduct',{data:this.showCartProduct,userId:this.userId})
+      this.$store.dispatch('orders/orderProduct', {data: this.showCartProduct, userId: this.userId,address:this.address})
     }
   },
 }

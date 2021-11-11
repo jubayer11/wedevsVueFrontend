@@ -54,18 +54,7 @@
       </v-icon>
      Sign In/Sign Up
     </v-btn>
-    <v-btn
-        color="primary"
-        depressed
-        rounded
-        small
-        class="mr-3"
-    >
-      <v-icon left small class="mr-2">
-        fa-boxes
-      </v-icon>
-      My Orders
-    </v-btn>
+    <toolbarMyOrder></toolbarMyOrder>
     <toolbarCart></toolbarCart>
     <v-badge
         bordered
@@ -167,11 +156,13 @@
 import {mapGetters} from "vuex";
 import {availableLocale} from "@/config/locale";
 import toolbarCart from "./../../views/Pages/Cart/toolbar/toolbarCart"
+import toolbarMyOrder from "./../../views/Pages/Orders/toolbar/myOrder"
+
 export default {
   props: {
     handleSettingsDrawer: Function,
   },
-  components:{toolbarCart},
+  components:{toolbarCart,toolbarMyOrder},
   data() {
     return {
       id: '',

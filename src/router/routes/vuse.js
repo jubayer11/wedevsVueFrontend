@@ -50,9 +50,10 @@ export default [
     defaultComponentPath: "Pages/Orders/orders",
     navs: true,
   },
+
   {
     params: {
-      path: "/my/order/:id",
+      path: "/my/order/:id/:view",
       name: "myOrdersView",
     },
     defaultComponentPath: "Pages/Orders/orderView",
@@ -104,6 +105,14 @@ export default [
       name: "DashboardOrders",
     },
     defaultComponentPath: "Pages/Dashboard/Orders/orders",
+    navs: true,
+  },
+  {
+    params: {
+      path: "/user/history/order/:id",
+      name: "ordersHistoryMy",
+    },
+    defaultComponentPath: "Pages/Orders/orderHistory",
     navs: true,
   },
   {

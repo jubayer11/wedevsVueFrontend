@@ -14,6 +14,7 @@ export const state =
         cartProduct: '',
         cartDeleteProduct: '',
         editIndex: -1,
+        totalPrice: 0,
 
     }
 
@@ -27,9 +28,11 @@ export const getters = {
 }
 export const mutations = {
     setGetCartProduct(state) {
-
+        state.totalPrice = 0;
         Object.keys(state.cartProduct).forEach(function (key) {
-            state.cartProduct[key].quantity=parseInt(state.cartProduct[key].quantity) - parseInt(state.cartProduct[key].customerQuantity);
+            state.totalPrice += (parseInt(state.cartProduct[key].customerQuantity) * parseInt(state.cartProduct[key].price));
+
+            state.cartProduct[key].quantity = parseInt(state.cartProduct[key].quantity) - parseInt(state.cartProduct[key].customerQuantity);
             if (state.cartProduct[key].quantity == 0) {
                 state.cartProduct[key].increment = true;
             }
@@ -89,6 +92,7 @@ export const actions = {
         axios.delete(`/api/cart/${state.cartDeleteProduct.id}`)
             .then(res => {
                 if (res) {
+                    state.totalPrice -= (parseInt(state.cartDeleteProduct.customerQuantity) * parseInt(state.cartDeleteProduct.price));
                     commit('setRemoveCartProduct');
                     snackbar.state.snackbar.condition = true;
                     snackbar.state.snackbar.message = 'Item Deleted From Cart';
