@@ -219,7 +219,7 @@ export const actions = {
         localStorage.removeItem('name')
         localStorage.removeItem('userRole')
         localStorage.removeItem('isStaff')
-        router.push({name: 'pages/authentication/LoginPage'})
+        router.push({name: 'authentication/LoginPage'})
 
     },
     storeUser(state, userData) {

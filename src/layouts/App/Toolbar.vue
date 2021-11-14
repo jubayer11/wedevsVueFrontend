@@ -56,24 +56,7 @@
     </v-btn>
     <toolbarMyOrder></toolbarMyOrder>
     <toolbarCart></toolbarCart>
-    <v-badge
-        bordered
-        color="error"
-        icon="mdi-lock"
-        overlap
-        class="mr-3"
-    >
-      <v-btn
-          color="primary"
-          depressed
-          rounded
-          small
-      >
-        <v-icon small>
-          fa-bell
-        </v-icon>
-      </v-btn>
-    </v-badge>
+    <appNotification></appNotification>
     <v-btn
         v-if="$vuetify.breakpoint.mdAndDown"
         class="mr-3"
@@ -134,7 +117,7 @@
       <v-list nav dense class="neu-glow-primary with-radius">
         <template v-for="(item, index) in items">
           <v-divider v-if="item.divider" :key="index"></v-divider>
-          <v-list-item :key="index" @click="() => {}" v-else>
+          <v-list-item  @click="userLog"  :key="index"  v-else>
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -157,12 +140,13 @@ import {mapGetters} from "vuex";
 import {availableLocale} from "@/config/locale";
 import toolbarCart from "./../../views/Pages/Cart/toolbar/toolbarCart"
 import toolbarMyOrder from "./../../views/Pages/Orders/toolbar/myOrder"
+import appNotification from "../App/appNotification";
 
 export default {
   props: {
     handleSettingsDrawer: Function,
   },
-  components:{toolbarCart,toolbarMyOrder},
+  components: {toolbarCart, toolbarMyOrder, appNotification},
   data() {
     return {
       id: '',
@@ -179,8 +163,6 @@ export default {
         },
       },
       items: [
-        {icon: "person", text: "Profile"},
-        {divider: true},
         {icon: "power_settings_new", text: "Logout"},
       ],
       nav: [
@@ -250,6 +232,9 @@ export default {
     },
   },
   methods: {
+    userLog() {
+        this.$store.dispatch('authentication/logout')
+    },
     changeTab(id) {
       this.id = id;
       if (this.id == 1) {

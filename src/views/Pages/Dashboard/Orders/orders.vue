@@ -1,7 +1,7 @@
 <template>
   <div class="vuse-content-wrapper">
     <v-container fluid>
-      <v-card class="neu-glow-inset with-radius pa-5">
+      <v-card v-if="pullAllOrder!=''" class="neu-glow-inset with-radius pa-5">
         <v-data-table
             :headers="headers"
             class="elevation-2 pt-6"
@@ -81,15 +81,17 @@
           </template>
         </v-data-table>
       </v-card>
+      <noRecord v-else></noRecord>
     </v-container>
   </div>
 </template>
 <script>
 import {mapActions, mapGetters} from "vuex";
 import editOrder from "./Crud/editOrder";
+import noRecord from "../../../Pages/noRecord/noReccordd";
 
 export default {
-  components: {editOrder},
+  components: {editOrder,noRecord},
   data: () => ({
         search: '',
 

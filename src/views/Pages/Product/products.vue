@@ -31,6 +31,7 @@
           </v-col>
         </v-row>
       </v-card>
+      <div v-if="showProductProducts!=''">
       <v-card class="neu-glow-inset py-3" style="min-height: 80vh">
         <v-row dense>
           <v-col
@@ -83,7 +84,6 @@
           </v-col>
         </v-row>
       </v-card>
-
       <div class="text-center my-6">
         <v-pagination
             v-model="page"
@@ -93,14 +93,18 @@
             :total-visible="7"
         ></v-pagination>
       </div>
+      </div>
+      <noRecord v-else></noRecord>
     </v-container>
   </div>
 </template>
 <script>
 import {mapGetters} from "vuex";
 import axios from "axios";
+import noRecord from "../../Pages/noRecord/noReccordd";
 
 export default {
+  components: {noRecord},
   data: () => ({
         url: axios.defaults.baseURL,
         sort: [{

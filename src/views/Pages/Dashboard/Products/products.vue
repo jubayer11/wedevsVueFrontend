@@ -1,7 +1,7 @@
 <template>
   <div class="vuse-content-wrapper">
     <v-container fluid>
-      <v-card class="neu-glow-inset with-radius pa-5">
+      <v-card v-if="showProducts !=''" class="neu-glow-inset with-radius pa-5">
         <v-data-table
             :headers="headers"
             class="elevation-2 pt-6"
@@ -64,6 +64,7 @@
           </template>
         </v-data-table>
       </v-card>
+      <noRecord v-else></noRecord>
     </v-container>
   </div>
 </template>
@@ -74,9 +75,9 @@ import editProduct from "./CRUD/editProduct";
 import deleteProduct from "./CRUD/deleteProduct";
 import viewDescription from "./CRUD/viewDescription"
 import axios from "axios";
-
+import noRecord from "../../../Pages/noRecord/noReccordd";
 export default {
-  components: {createProduct, viewDescription,editProduct,deleteProduct},
+  components: {createProduct, viewDescription,editProduct,deleteProduct,noRecord},
   data: () => ({
         fetchUsers: 'allUsers',
         search: '',

@@ -1,7 +1,7 @@
 <template>
   <div class="vuse-content-wrapper">
     <v-container>
-      <v-card class="neu-glow-inset px-12 py-12">
+      <v-card v-if="showCartProduct!=''" class="neu-glow-inset px-12 py-12">
         <v-card class="neu-glow-primary with-radius ma-12 px-4" :key="product.id"
                 v-for="(product,index) in showCartProduct"
         >
@@ -55,14 +55,17 @@
           </v-btn>
         </v-row>
       </v-card>
+      <noRecord v-else></noRecord>
     </v-container>
   </div>
 </template>
 <script>
 import {mapGetters} from "vuex";
 import axios from "axios";
+import noRecord from "../../Pages/noRecord/noReccordd";
 
 export default {
+  components: {noRecord},
   data: () => ({
     url: axios.defaults.baseURL,
     userId: '',

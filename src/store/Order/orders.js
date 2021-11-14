@@ -8,6 +8,7 @@ export const state =
         userId: '',
         address: '',
         myOrder: [],
+        cloneMyOrder: [],
         orderId: '',
         orderView: '',
         orderDeleteProduct: '',
@@ -17,6 +18,7 @@ export const state =
         editOrder: '',
         editIndex: -1,
         editDialog: 0,
+        status: null,
     }
 
 export const getters = {
@@ -64,6 +66,18 @@ export const mutations = {
         if (state.editIndex > -1) {
             Object.assign(state.allOrders[state.editIndex], state.editOrder)
         }
+    },
+    filterOrder(state, status) {
+        state.status = status.status;
+        state.myOrder = state.cloneMyOrder;
+        if (state.status!=5)
+        {
+            state.myOrder =  state.myOrder.filter((el) => {
+                return (el.status==state.status);
+            });
+        }
+
+
     },
 
 }
@@ -118,6 +132,7 @@ export const actions = {
             .then(res => {
                 if (res) {
                     state.myOrder = res.data.data;
+                    state.cloneMyOrder = res.data.data;
                 }
             })
     },

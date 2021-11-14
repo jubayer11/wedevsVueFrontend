@@ -141,7 +141,6 @@ export default {
       if (newValue == 1) {
         this.dialogCreate = false;
         this.form = Object.assign({}, defaultForm);
-        this.$refs.form.reset();
         this.$v.$reset();
       }
     }
@@ -169,7 +168,6 @@ export default {
     dialogCreateSubmit() {
       this.dialogCreate = false;
       this.form = Object.assign({}, defaultForm);
-      this.$refs.form.reset();
       this.$v.$reset();
     },
 
