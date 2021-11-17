@@ -2,6 +2,9 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const productionGzipExtensions = ["js", "css"];
 
 module.exports = {
+  // publicPath: process.env.NODE_ENV === 'production'
+  //     ? '/wedevsFrontend/'
+  //     : '/',
   transpileDependencies: ["vuetify"],
   configureWebpack: {
     plugins: [
@@ -19,4 +22,7 @@ module.exports = {
       return args;
     });
   },
+  // devServer: {
+  //   proxy: 'https://jubayerahmed.com/wedevsBackend/',
+  // }
 };

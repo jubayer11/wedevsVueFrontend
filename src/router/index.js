@@ -12,6 +12,7 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
   mode: "history",
+  // base: '/wedevsFrontend/',
   scrollBehviour(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
