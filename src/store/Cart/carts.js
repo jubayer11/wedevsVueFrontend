@@ -1,6 +1,7 @@
 import axios from "../axios-default";
 import snackbar from "@/store/Snackbar";
 import router from "@/router";
+import store from "@/store";
 
 export const state =
     {
@@ -70,21 +71,32 @@ export const actions = {
             )
     },
     addToCart({state, dispatch}, cart) {
-        snackbar.state.snackbar.condition = false;
-        snackbar.state.snackbar.message = '';
-        state.cart.productId = cart.productId;
-        state.cart.UserId = cart.userId;
-        state.cart.quantity = cart.quantity;
-        state.UserId = state.cart.UserId;
-        axios.post(`/api/cart`, state.cart)
-            .then(res => {
-                if (res) {
-                    state.cartCount += 1;
-                    snackbar.state.snackbar.condition = true
-                    snackbar.state.snackbar.message = 'New Product Added to cart'
-                    dispatch('getProductCartCount', {userId: state.userId});
-                }
+        if (store.getters['authentication/isAuthenticated'])
+        {
+            snackbar.state.snackbar.condition = false;
+            snackbar.state.snackbar.message = '';
+            state.cart.productId = cart.productId;
+            state.cart.UserId = cart.userId;
+            state.cart.quantity = cart.quantity;
+            state.UserId = state.cart.UserId;
+
+            axios.post(`/api/cart`, state.cart)
+                .then(res => {
+                    if (res) {
+                        state.cartCount += 1;
+                        snackbar.state.snackbar.condition = true
+                        snackbar.state.snackbar.message = 'New Product Added to cart'
+                        dispatch('getProductCartCount', {userId: state.userId});
+                    }
+                })
+        }
+        else
+        {
+            router.push({
+                name: 'authentication/LoginPage',
             })
+        }
+
     },
     detachCartProduct({state, commit}, data) {
         snackbar.state.snackbar.condition = false;
