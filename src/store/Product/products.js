@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios-default";
 import snackbar from "@/store/Snackbar";
 import router from "@/router";
 

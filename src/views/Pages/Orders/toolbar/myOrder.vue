@@ -17,16 +17,22 @@
 </template>
 <script>
 
-export default {
-  data: () => ({
+import router from "../../../../router";
 
-      }
+export default {
+  data: () => ({}
 
   ),
 
   methods: {
     showMyOrder() {
-      this.$store.dispatch('orders/showMyOrder')
+      if (localStorage.getItem('token')) {
+        this.$store.dispatch('orders/showMyOrder')
+      }
+      else
+      {
+        router.push({name: 'authentication/LoginPage'})
+      }
     },
   },
 }

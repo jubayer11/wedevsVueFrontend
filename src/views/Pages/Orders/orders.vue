@@ -1,6 +1,35 @@
 <template>
   <div class="vuse-content-wrapper">
     <v-container fluid>
+      <v-card class="neu-glow with-radius pa-5">
+      <v-row class="px-4" align="center" justify="center">
+        <v-col cols="12" md="6">
+          <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify "
+              label="Search"
+              outlined
+              dense
+              single-line
+              class="shrink"
+
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-select
+              :items="items"
+              v-model="status"
+              label="filter by status"
+              item-text="value"
+              item-value="id"
+              outlined
+              dense
+              single-line
+              class="shrink"
+          ></v-select>
+        </v-col>
+      </v-row>
+      </v-card>
       <v-card v-if="pullMyOrder!=''" class="neu-glow-inset with-radius pa-5">
         <v-data-table
             :headers="headers"
@@ -28,33 +57,6 @@
             </div>
           </template>
           <template v-slot:top>
-            <v-row class="px-4" align="center" justify="center">
-              <v-col cols="12" md="6">
-                <v-text-field
-                    v-model="search"
-                    append-icon="mdi-magnify "
-                    label="Search"
-                    outlined
-                    dense
-                    single-line
-                    class="shrink"
-
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-select
-                    :items="items"
-                    v-model="status"
-                    label="filter by status"
-                    item-text="value"
-                    item-value="id"
-                    outlined
-                    dense
-                    single-line
-                    class="shrink"
-                ></v-select>
-              </v-col>
-            </v-row>
             <v-toolbar
                 flat
             >

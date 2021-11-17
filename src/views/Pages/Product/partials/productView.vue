@@ -61,6 +61,7 @@
 <script>
 import {mapGetters} from "vuex";
 import axios from "axios";
+import router from "../../../../router";
 
 export default {
   data: () => ({
@@ -113,8 +114,15 @@ export default {
       }
     },
     addToCart() {
-      this.userId = localStorage.getItem('userId');
-      this.$store.dispatch('carts/addToCart', {productId: this.$route.params.id,userId:this.userId,quantity:this.selectedQuantity})
+      if (localStorage.getItem('token')) {
+        this.userId = localStorage.getItem('userId');
+        this.$store.dispatch('carts/addToCart', {productId: this.$route.params.id,userId:this.userId,quantity:this.selectedQuantity})
+      }
+      else
+      {
+        router.push({name: 'authentication/LoginPage'})
+      }
+
     },
   },
 

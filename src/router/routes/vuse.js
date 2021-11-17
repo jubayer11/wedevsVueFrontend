@@ -29,6 +29,7 @@ export default [
     params: {
       path: "/cart",
       name: "cartView",
+      meta: {requiresAuth: true},
     },
     defaultComponentPath: "Pages/Cart/cart",
     navs: true,
@@ -38,6 +39,7 @@ export default [
     params: {
       path: "/checkout",
       name: "checkoutView",
+      meta: {requiresAuth: true},
     },
     defaultComponentPath: "Pages/Checkout/checkout",
     navs: true,
@@ -46,6 +48,7 @@ export default [
     params: {
       path: "/my/order",
       name: "myOrders",
+      meta: {requiresAuth: true},
     },
     defaultComponentPath: "Pages/Orders/orders",
     navs: true,
@@ -55,6 +58,7 @@ export default [
     params: {
       path: "/my/order/:id/:view",
       name: "myOrdersView",
+      meta: {requiresAuth: true},
     },
     defaultComponentPath: "Pages/Orders/orderView",
     navs: true,
@@ -63,6 +67,8 @@ export default [
     params: {
       path: "/login",
       name: "authentication/LoginPage",
+      meta: {guest: true},
+
     },
     defaultComponentPath: "Pages/Authentication/Login/login",
     navs: true,
@@ -71,6 +77,7 @@ export default [
     params: {
       path: "/signup",
       name: "authentication/Signup/Page",
+      meta: {guest: true},
     },
     defaultComponentPath: "Pages/Authentication/Signup/signup",
     navs: true,
@@ -79,6 +86,7 @@ export default [
     params: {
       path: "/dashboard",
       name: "Dashboard",
+      meta: {admin: true},
     },
     defaultComponentPath: "Pages/Dashboard/dashboard",
     navs: true,
@@ -87,6 +95,7 @@ export default [
     params: {
       path: "/dashboard/users",
       name: "dashboardUsers",
+      meta: {admin: true},
     },
     defaultComponentPath: "Pages/Dashboard/Users/users",
     navs: true,
@@ -95,6 +104,7 @@ export default [
     params: {
       path: "/dashboard/products",
       name: "DashboardProducts",
+      meta: {admin: true},
     },
     defaultComponentPath: "Pages/Dashboard/Products/products",
     navs: true,
@@ -103,6 +113,7 @@ export default [
     params: {
       path: "/dashboard/orders",
       name: "DashboardOrders",
+      meta: {admin: true},
     },
     defaultComponentPath: "Pages/Dashboard/Orders/orders",
     navs: true,
@@ -111,6 +122,7 @@ export default [
     params: {
       path: "/user/history/order/:id",
       name: "ordersHistoryMy",
+      meta: {requiresAuth: true},
     },
     defaultComponentPath: "Pages/Orders/orderHistory",
     navs: true,

@@ -2,15 +2,15 @@ import LazyLoad from "@/utils/AsyncRouteHelper";
 import VuseRoutes from "./routes/vuse";
 const AppSidebar = () =>
   import(
-    /* webpackChunkName: "Vusenavs", webpackPreload: true */ "@/layouts/App/Sidebar"
+     "@/layouts/App/Sidebar"
   );
 const AppToolbar = () =>
   import(
-    /* webpackChunkName: "Vusenavs", webpackPreload: true */ "@/layouts/App/Toolbar"
+     "@/layouts/App/Toolbar"
   );
 const AppFooter = () =>
   import(
-    /* webpackChunkName: "Vusenavs",  webpackPreload: true */ "@/layouts/App/Footer"
+     "@/layouts/App/Footer"
   );
 
 const AllRoutes = [...VuseRoutes];

@@ -55,6 +55,12 @@
                           solo
                           flat
                       />
+                      <div class="text-sm-h6 d-flex justify-center align-center mb-3">
+                        <span class="custom__error__message"
+                              v-if="getSignUpError.email && errorShowEmail"> {{
+                            getSignUpError.email[0]
+                          }} </span>
+                      </div>
                       <v-text-field
                           :error-messages="fieldErrors('form.password')"
                           :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
@@ -90,19 +96,23 @@
                           <v-btn-toggle
                               class="transparent blue--text"
                               @click.native.stop="dialog = !dialog"
-                          >terms & privacy policy</v-btn-toggle
-                          >.
+                          >terms & privacy policy
+                          </v-btn-toggle
+                          >
+                          .
                         </div>
                       </v-checkbox>
                       <v-btn block type="submit" :disabled="$v.$invalid"
-                      >Sign Up</v-btn
+                      >Sign Up
+                      </v-btn
                       >
                       <div class="text-center my-5">
                         Already have account ?
                         <router-link
-                            to="/pages/authentication/login"
+                            to="/login"
                             class="py-1 no-text-decoration"
-                        >Login</router-link
+                        >Login
+                        </router-link
                         >
                       </div>
                     </v-form>
@@ -123,8 +133,9 @@
 
 <script>
 // Validations
-import { required, email, sameAs, minLength } from "vuelidate/lib/validators";
+import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
+import {mapGetters} from "vuex";
 
 const defaultForm = {
   name: "",
@@ -136,14 +147,14 @@ export default {
   mixins: [validationMixin],
   validations: {
     form: {
-      name: { required },
-      email: { required, email },
-      password: { required, minLength: minLength(6) },
+      name: {required},
+      email: {required, email},
+      password: {required, minLength: minLength(6)},
       repeatPassword: {
         required,
         sameAsPassword: sameAs("password"),
       },
-      agreeToPolicy: { required },
+      agreeToPolicy: {required},
     },
   },
   validationMessages: {
@@ -170,23 +181,36 @@ export default {
       showPwd: false,
       snackbar: false,
       dialog: false,
+      errorShowEmail: true,
     };
   },
   methods: {
     submit() {
-      this.snackbar = true;
-      this.resetForm();
-      this.$v.$reset();
-      setTimeout(() => {
-        this.$router.push({
-          name: "dashboard/operational",
-        });
-      }, 2000);
+      this.$store.dispatch('authentication/signUp', this.form)
     },
-    resetForm() {
-      this.form = Object.assign({}, defaultForm);
-      this.$refs.form.reset();
+
+  },
+  watch: {
+    getSignUpError(newValue) {
+      if (newValue != '') {
+        this.errorShowEmail = true;
+
+      }
+    },
+    etSignUpSuccess(newValue) {
+      if (newValue == 1) {
+        this.form = Object.assign({}, defaultForm);
+        this.$refs.form.reset();
+      }
+
     },
   },
+  computed: {
+    ...mapGetters("authentication", [
+      "getSignUpError",
+      "getSignUpSuccess",
+
+    ]),
+  }
 };
 </script>

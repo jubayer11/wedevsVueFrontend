@@ -26,7 +26,7 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="text-h6 primary--text"
-          >Vuse Admin</v-list-item-title
+          >Wedevs Admin</v-list-item-title
         >
       </v-list-item-content>
     </v-list-item>

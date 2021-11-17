@@ -71,7 +71,8 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import axios from "axios";
+import axios from "../../../store/axios-default";
+
 
 export default {
   data: () => ({
@@ -94,8 +95,8 @@ export default {
       this.$store.dispatch('products/viewProduct', {product: product})
     },
     addToCart(id) {
-      this.userId = localStorage.getItem('userId');
-      this.$store.dispatch('carts/addToCart', {productId: id,userId:this.userId,quantity:0})
+        this.userId = localStorage.getItem('userId');
+        this.$store.dispatch('carts/addToCart', {productId: id,userId:this.userId,quantity:0})
     },
   },
 }

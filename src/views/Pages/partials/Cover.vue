@@ -12,12 +12,14 @@
               class="text-center"
               cols="12"
           >
+            <div class="home__tag__slogan">
             <h1 class="text-h4 font-weight-thin mb-4">
-              Vuetify
+              The World’s Most Comfortable Shoes
             </h1>
             <h4 class="subheading">
-              Build your application today!
+             check now
             </h4>
+            </div>
           </v-col>
         </v-row>
       </v-parallax>

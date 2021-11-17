@@ -71,11 +71,7 @@
                             label="Remember Me"
                             class="mt-0"
                         ></v-checkbox>
-                        <router-link
-                            to="/pages/authentication/forgot-password"
-                            class="py-1 no-text-decoration"
-                        >Forgot Password
-                        </router-link>
+
                       </div>
                       <v-btn block type="submit" :disabled="$v.$invalid"
                       >Sign In</v-btn

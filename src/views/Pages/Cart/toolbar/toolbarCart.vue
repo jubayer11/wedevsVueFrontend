@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-badge
+
         bordered
         color="error"
         overlap
@@ -32,7 +33,10 @@ export default {
 
   ),
   created() {
-    this.getProductCartCount();
+    if (localStorage.getItem('token'))
+    {
+      this.getProductCartCount();
+    }
   },
   computed: {
     ...

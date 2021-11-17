@@ -42,6 +42,7 @@
     </div>
     <v-spacer/>
     <v-btn
+        v-if="!isAuthenticated"
         color="primary"
         depressed
         rounded
@@ -52,11 +53,11 @@
       <v-icon left small class="mr-2">
         fa-sign-in-alt
       </v-icon>
-     Sign In/Sign Up
+      Sign In/Sign Up
     </v-btn>
     <toolbarMyOrder></toolbarMyOrder>
     <toolbarCart></toolbarCart>
-    <appNotification></appNotification>
+    <appNotification v-if="isAdmin"></appNotification>
     <v-btn
         v-if="$vuetify.breakpoint.mdAndDown"
         class="mr-3"
@@ -117,7 +118,7 @@
       <v-list nav dense class="neu-glow-primary with-radius">
         <template v-for="(item, index) in items">
           <v-divider v-if="item.divider" :key="index"></v-divider>
-          <v-list-item  @click="userLog"  :key="index"  v-else>
+          <v-list-item @click="userLog" :key="index" v-else>
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -151,16 +152,7 @@ export default {
     return {
       id: '',
       authUser: {
-        name: "Alice Blue",
-        firstname: "Alice",
-        lastname: "Blue",
-        email: "aliceblue@example.com",
         avatar: `/static/ali.jpg`,
-        mood: "Vuse - Powerful VuejS admin template.",
-        status: {
-          color: "success",
-          icon: "check_circle",
-        },
       },
       items: [
         {icon: "power_settings_new", text: "Logout"},
@@ -173,7 +165,7 @@ export default {
           title: 'Back to Home page',
           active: true,
           color: 'red',
-          to:'/home'
+          to: '/home'
         },
         {
           id: 2,
@@ -181,7 +173,7 @@ export default {
           text: 'Products',
           title: 'About this demo',
           active: false,
-          to:'/products',
+          to: '/products',
           color: '',
         },
       ],
@@ -208,6 +200,10 @@ export default {
     ]),
     ...mapGetters("scheme", ["header"]),
     ...mapGetters(["locale"]),
+    ...mapGetters("authentication", [
+      "isAdmin",
+      "isAuthenticated",
+    ]),
     isClippedRight() {
       return this.isClippedOver && this.isSidenavPostionRight;
     },
@@ -233,16 +229,14 @@ export default {
   },
   methods: {
     userLog() {
-        this.$store.dispatch('authentication/logout')
+      this.$store.dispatch('authentication/logout')
     },
     changeTab(id) {
       this.id = id;
       if (this.id == 1) {
         this.nav[0].color = 'red';
         this.nav[1].color = '';
-      }
-      else
-      {
+      } else {
         this.nav[1].color = 'red';
         this.nav[0].color = '';
       }

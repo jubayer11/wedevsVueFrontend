@@ -15,7 +15,7 @@ module.exports = {
   },
   chainWebpack(config) {
     config.plugin("html").tap((args) => {
-      args[0].title = "The Vuse: Admin Template";
+      args[0].title = "Wedevs Assignment";
       return args;
     });
   },

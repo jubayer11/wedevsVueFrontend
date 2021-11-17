@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios-default";
 import snackbar from "@/store/Snackbar";
 import router from "@/router";
 
@@ -42,6 +42,7 @@ export const mutations = {
         })
     },
     setRemoveCartProduct(state) {
+        state.cartCount -= 1;
         state.editIndex = state.cartProduct.findIndex(x => x.id === state.cartDeleteProduct.id);
         if (state.editIndex > -1) {
             state.cartProduct.splice(state.editIndex, 1);
@@ -51,7 +52,6 @@ export const mutations = {
 export const actions = {
     getProductCartCount({state}, userId) {
         state.userId = userId.userId;
-        console.log('cart count bullshit', state.userId);
 
         axios.get(`/api/cart/count/${state.userId}`)
             .then(res => {
@@ -79,6 +79,7 @@ export const actions = {
         axios.post(`/api/cart`, state.cart)
             .then(res => {
                 if (res) {
+                    state.cartCount += 1;
                     snackbar.state.snackbar.condition = true
                     snackbar.state.snackbar.message = 'New Product Added to cart'
                     dispatch('getProductCartCount', {userId: state.userId});
@@ -108,6 +109,7 @@ export const actions = {
         axios.post(`/api/cart/update`, {cartProduct: state.cartProduct})
             .then(res => {
                 if (res) {
+                    state.cartCount = 0;
                     router.push({
                         name: 'checkoutView',
                     })

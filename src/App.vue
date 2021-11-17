@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <router-view name="sidebar" />
+    <router-view v-if="isAdmin" name="sidebar" />
     <router-view name="header" :handleSettingsDrawer="handleSettingsDrawer" />
     <v-main class="vuse-content">
       <v-fade-transition>
@@ -17,6 +17,7 @@
 
 <script>
 import AppSettingsDrawer from "@/layouts/App/AppSettingsDrawer";
+import {mapGetters} from "vuex";
 
 export default {
   data: () => {
@@ -32,6 +33,12 @@ export default {
     handleSettingsDrawer() {
       this.settingsDrawer = !this.settingsDrawer;
     },
+  },
+  computed: {
+    ...
+        mapGetters("authentication", [
+          "isAdmin",
+        ]),
   },
 };
 </script>

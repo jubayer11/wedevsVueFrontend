@@ -13,5 +13,8 @@ export default {
     name: '',
     isStaff: '',
     isSignup: null,
+    newUser: '',
+    signUpError: '',
+    signUpSuccess:0,
 
 };

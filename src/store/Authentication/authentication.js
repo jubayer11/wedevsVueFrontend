@@ -1,6 +1,6 @@
 import config from "@/config/index";
 import axios from './axios-auth'
-import globalAxios from 'axios'
+import globalAxios from '../axios-default'
 import router from '../../router'
 import snackbar from '../Snackbar/index'
 import sidebar from "../../config/navigations/sidebar";
@@ -21,11 +21,12 @@ export const getters = {
             return false;
         }
     },
-    resetEmailErrorMessage: (state) => {
-        return state.resetEmailError;
-    },
-    getPasswordConfirmationError: (state) => {
-        return state.getPasswordConfirmationError;
+    isAdmin: (state) => {
+        if (state.role == 'admin') {
+            return true;
+        } else {
+            return false;
+        }
     },
     getSnackBar: (state) => {
         return state.snackbar;
@@ -39,7 +40,12 @@ export const getters = {
     getStaff: (state) => {
         return state.isStaff;
     },
-
+    getSignUpError: (state) => {
+        return state.signUpError;
+    },
+    getSignUpSuccess: (state) => {
+        return state.signUpSuccess;
+    }
 
 };
 export const mutations = {
@@ -49,12 +55,6 @@ export const mutations = {
 
     getError(state, loginErrors) {
         state.errors = loginErrors;
-    },
-    getResetEmailError(state, resetEmailError) {
-        state.resetEmailError = resetEmailError;
-    },
-    getPasswordConfirmationError(state, resetEmailError) {
-        state.getPasswordConfirmationError = resetEmailError;
     },
     authUser(state, userData) {
         state.idToken = userData.token
@@ -94,9 +94,6 @@ export const actions = {
 
         if (state.decoding != null) {
             const payload = state.decoding;
-            // if (payload.iss == "https://mysportshive.com/sportsHive/api/dashboard/auth/login") {
-            //     state.condition = true;
-            // }
             if (payload.iss == "http://127.0.0.1:8000/api/auth/login") {
                 state.condition = true;
             }
@@ -121,8 +118,25 @@ export const actions = {
             commit('checkingIsBase64')
         }
     },
+    signUp({state}, data) {
+        snackbar.state.snackbar.condition = false;
+        snackbar.state.snackbar.message = '';
+        state.newUser = data;
+        state.signUpSuccess = 0;
+        axios.post('/auth/signup', state.newUser)
+            .then(res => {
+                if (res) {
 
+                    snackbar.state.snackbar.condition = true
+                    snackbar.state.snackbar.message = 'You have successfully signed up'
+                    state.signUpSuccess = 1;
+                    state.signUpError = '';
+                    router.push({name: 'authentication/LoginPage'})
+                }
+            })
+            .catch(error => state.signUpError = error.response.data.errors)
 
+    },
     login({state, commit, dispatch}, authData) {
         snackbar.state.snackbar.condition = false;
         snackbar.state.snackbar.message = '';
@@ -137,17 +151,9 @@ export const actions = {
             .then(res => {
 
                 const access_token = res.data.access_token;
-                state.isSignup = res.data.isSignup;
                 state.userId = res.data.userUniqueId;
                 dispatch('isValid', access_token)
-                if (state.isSignup == 1 && state.condition == true) {
-                    sidebar.show = false;
-                    console.log('hello mello', state.condition, state.isSignup,state.userId);
-                    router.push({
-                        name: 'loginChangePassword',
-                        params:{id:state.userId}
-                    })
-                } else if (state.condition == true) {
+                if (state.condition == true) {
                     localStorage.setItem('token', res.data.access_token)
                     localStorage.setItem('token_type', res.data.token_type)
                     localStorage.setItem('userId', res.data.userUniqueId)
@@ -155,6 +161,8 @@ export const actions = {
                     localStorage.setItem('userRole', res.data.userRole)
                     localStorage.setItem('isStaff', res.data.isStaff)
                     localStorage.setItem('name', res.data.name)
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                    globalAxios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                     commit('authUser', {
                         token: res.data.idToken,
                         userId: res.data.userUniqueId,
@@ -205,21 +213,31 @@ export const actions = {
             token: token,
             userId: userId
         })
-    }
-    ,
+    },
     logout({commit}) {
-        setTimeout(() => {
-            snackbar.state.snackbar.condition = true;
-            snackbar.state.snackbar.message = 'Logged Out Successfully';
-        }, 2)
-        commit('clearAuthData')
-        localStorage.removeItem('expirationDate')
-        localStorage.removeItem('token')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('name')
-        localStorage.removeItem('userRole')
-        localStorage.removeItem('isStaff')
-        router.push({name: 'authentication/LoginPage'})
+        console.log('hello')
+        snackbar.state.snackbar.condition = false;
+        snackbar.state.snackbar.message = '';
+        axios.post(`auth/logout`)
+            .then(res => {
+                if (res) {
+                    setTimeout(() => {
+                        snackbar.state.snackbar.condition = true;
+                        snackbar.state.snackbar.message = 'Logged Out Successfully';
+                    }, 2)
+                    commit('clearAuthData')
+                    localStorage.removeItem('expirationDate')
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('userId')
+                    localStorage.removeItem('name')
+                    localStorage.removeItem('userRole')
+                    localStorage.removeItem('isStaff')
+                    axios.defaults.headers.common['Authorization'] = null;
+                    globalAxios.defaults.headers.common['Authorization'] = null;
+                    router.push({name: 'authentication/LoginPage'})
+                }
+            })
+
 
     },
     storeUser(state, userData) {
@@ -229,8 +247,7 @@ export const actions = {
         globalAxios.post('/users.json' + '?auth=' + state.idToken, userData)
             .then(res => console.log(res))
             .catch(error => console.log(error))
-    }
-    ,
+    },
     fetchUser({commit, state}) {
         if (!state.idToken) {
             return
@@ -249,53 +266,7 @@ export const actions = {
                 commit('storeUser', users[0])
             })
             .catch(error => console.log(error))
-    }
-    ,
-    sendResetPasswordEmail({state, commit}, email) {
-
-
-        state.snackbar = true;
-        state.resetEmailError = '';
-        axios.post('/dashboard/auth/reset-password', {
-
-            email: email,
-
-        })
-            .then(res => {
-                setTimeout(() => {
-                    snackbar.state.snackbar.condition = true;
-                    snackbar.state.snackbar.message = 'We have sent You a email to reset your password';
-                }, 2)
-                console.log(res)
-            })
-            .catch((error) => {
-
-                commit('getResetEmailError', error.response.data.errors)
-
-            });
     },
-    gettingToken({commit}, resetData) {
-
-        axios.post("/dashboard/auth/reset/password", {
-            token: resetData.token,
-            email: resetData.email,
-            password: resetData.password,
-            password_confirmation: resetData.password_confirmation
-        })
-            .then(res => {
-                setTimeout(() => {
-                    snackbar.state.snackbar.condition = true;
-                    snackbar.state.snackbar.message = 'Password Reset Successfully. You Can Login Now';
-                }, 2)
-                console.log(res)
-                console.log('hello')
-            })
-            .catch((error) => {
-
-                commit('getPasswordConfirmationError', error.response.data.errors)
-
-            });
-    }
 };
 export default {
     state,

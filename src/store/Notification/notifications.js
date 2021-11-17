@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from "../axios-default";
 
 export const state =
     {
         userId: null,
         notifications: '',
-        countUnreadNotification: '',
+        countUnreadNotification: 0,
         dashBoardData: '',
     }
 export const getters =
